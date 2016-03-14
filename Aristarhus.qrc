@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/connect.png</file>
+        <file>images/disconnect.png</file>
+        <file>images/application-exit.png</file>
+        <file>images/settings.png</file>
+        <file>images/clear.png</file>
+        <file>images/kompass/Course_arrow.jpg</file>
+        <file>images/kompass/Pitch_arrow.jpg</file>
+        <file>images/kompass/Roll_arrow.jpg</file>
+        <file>images/kompass/Compass.jpg</file>
+        <file>images/kompass/Pitch.jpg</file>
+        <file>images/kompass/Roll.jpg</file>
+    </qresource>
+</RCC>
