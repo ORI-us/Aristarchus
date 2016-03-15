@@ -8,9 +8,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "settingsdialog.h"
-#include "Formulars/NMEA_DIALOG/dialog.h"
-#include "parse_nmea.h"
-
+#include <Formulars/NMEA_DIALOG/dialog.h>
+#include <parse_nmea.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), Settings("Aristarhus", "Aristarhus"), BINR_NMEA(0), read_Accel(false),
@@ -26,10 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(dialog_Action, SIGNAL(triggered(bool)), dialog, SLOT(setVisible(bool)));
 
     serial_1 = new QSerialPort(this);
-    serial_2 = new QSerialPort(this);
-
     settings_1    = new SettingsDialog(Settings, QString("Port_1"));
-    settings_2    = new SettingsDialog(Settings, QString("Port_2"));
 
     parse_nmea = new Parse_NMEA(ui->menuNMEA);
 
@@ -62,7 +58,6 @@ void MainWindow::closeEvent(QCloseEvent *)
 {
     WriteSettings();
     delete(settings_1);
-    delete(settings_2);
     delete(dialog);
     delete(CRP);
     delete(parse_nmea);
@@ -141,55 +136,6 @@ void MainWindow::closeSerialPort_1()
     dialog->Disable_Enable_Send(false);
 }
 
-void MainWindow::openSerialPort_2()
-{
-    SettingsDialog::Settings p = settings_2->settings();
-    serial_2->setPortName(p.name);
-    if (serial_2->open(QIODevice::ReadWrite)) {
-        if (serial_2->setBaudRate(p.baudRate)
-                && serial_2->setDataBits(p.dataBits)
-                && serial_2->setParity(p.parity)
-                && serial_2->setStopBits(p.stopBits)
-                && serial_2->setFlowControl(p.flowControl)) {
-
-            dialog->setEnabled(true);
-            dialog->Read_Button_Settings(false);
-            dialog->setLocalEchoEnabled(p.localEchoEnabled);
-            ui->actionConnect_2->setEnabled(false);
-            ui->actionDisconnect_2->setEnabled(true);
-            ui->actionConfigure_2->setEnabled(false);
-            ui->statusBar->showMessage(tr("Connected to %1 : %2, %3, %4, %5, %6")
-                                       .arg(p.name).arg(p.stringBaudRate).arg(p.stringDataBits)
-                                       .arg(p.stringParity).arg(p.stringStopBits).arg(p.stringFlowControl));
-
-            dialog->Disable_Enable_Send(true);
-        } else {
-            serial_2->close();
-            QMessageBox::critical(this, tr("Error"), serial_2->errorString());
-
-            ui->statusBar->showMessage(tr("Open error"));
-        }
-    } else {
-        QMessageBox::critical(this, tr("Error"), serial_2->errorString());
-
-        ui->statusBar->showMessage(tr("Configure error"));
-    }
-}
-
-
-void MainWindow::closeSerialPort_2()
-{
-    serial_2->close();
-    ui->actionConnect_2->setEnabled(true);
-    ui->actionDisconnect_2->setEnabled(false);
-    ui->actionConfigure_2->setEnabled(true);
-    ui->statusBar->showMessage(tr("Disconnected"));
-    dialog->Read_Button_Settings(true);
-
-    dialog->Disable_Enable_Send(false);
-}
-
-
 void MainWindow::about()
 {
 
@@ -209,16 +155,6 @@ void MainWindow::readDatafromPort_1()
     dialog->Show_NMEA_Text(data);
 }
 
-void MainWindow::readDatafromPort_2()
-{
-    QByteArray data = serial_2->readAll();
-
-    dialog->Show_NMEA_Text_1(data);
-    QString Text  = QString::fromLocal8Bit(data);
-
-    parse_nmea->Parse_Second_Slot(Text);
-
-}
 
 void MainWindow::ACCEL_TO_Dialog(const struct POHPR &)
 {
@@ -260,25 +196,12 @@ void MainWindow::Resize_Slot(const QSize &Size)
 }
 
 
-void MainWindow::Language_Change(QAction* )
-{
-    QMessageBox::about(this, "Aristarhus", tr("You must restart program for set chosen language"));
-}
-
-void MainWindow::ZDA_Slot(const struct POHPR &)
-{
-    read_Accel = true;
-}
-
 void MainWindow::initActionsConnections()
 {
     connect(ui->actionConnect_1,    SIGNAL(triggered()), this,        SLOT(openSerialPort_1()));
     connect(ui->actionDisconnect_1, SIGNAL(triggered()), this,        SLOT(closeSerialPort_1()));
-    connect(ui->actionConnect_2,    SIGNAL(triggered()), this,        SLOT(openSerialPort_2()));
-    connect(ui->actionDisconnect_2, SIGNAL(triggered()), this,        SLOT(closeSerialPort_2()));
     connect(ui->actionQuit,         SIGNAL(triggered()), this,        SLOT(close()));
     connect(ui->actionConfigure_1,  SIGNAL(triggered()), settings_1,  SLOT(show()));
-    connect(ui->actionConfigure_2,  SIGNAL(triggered()), settings_2,  SLOT(show()));
     connect(ui->actionAbout,        SIGNAL(triggered()), this,        SLOT(about()));
     connect(ui->actionAboutQt,      SIGNAL(triggered()), qApp,        SLOT(aboutQt()));
 }

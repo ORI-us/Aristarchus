@@ -38,18 +38,13 @@ public slots:
 private slots:
     void openSerialPort_1();
     void closeSerialPort_1();
-    void openSerialPort_2();
-    void closeSerialPort_2();
+    void readDatafromPort_1();
     void about();
     void write_NMEA_Data_SLOT(const QString &);
-    void readDatafromPort_1();
-    void readDatafromPort_2();
     void ACCEL_TO_Dialog(const struct POHPR &);
     void handleError(QSerialPort::SerialPortError error);
     void Enable_Connect(bool);
     void Resize_Slot(const QSize &);
-    void Language_Change(QAction*);
-    void ZDA_Slot(const struct POHPR &);
 private:
     void initActionsConnections();
     void NMEA_Select();
@@ -66,8 +61,8 @@ private:
     Dialog              *dialog;
     New_Dialog          *new_Dialog;
     Course_Roll_Pitch   *CRP;
-    SettingsDialog      *settings_1, *settings_2;
-    QSerialPort         *serial_1,   *serial_2;
+    SettingsDialog      *settings_1;
+    QSerialPort         *serial_1;
     Parse_NMEA          *parse_NMEA;
 
     QByteArray          Accel_Byte;
