@@ -38,6 +38,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction *CHT_Action = ui->menuView->addAction("Course Roll Pitch");
     connect(CHT_Action, SIGNAL(triggered()), CRP, SLOT(show()));
 
+    new_Dialog = new New_Dialog();
+    new_Dialog->setWindowTitle("New Dialog");
+    QAction *New_dialog_Action = ui->menuView->addAction("New_Dialog");
+    connect(New_dialog_Action, SIGNAL(triggered()), new_Dialog, SLOT(show()));
+
     ui->actionConnect_1->setEnabled(true);
     ui->actionDisconnect_1->setEnabled(false);
     ui->actionQuit->setEnabled(true);
@@ -197,39 +202,6 @@ void MainWindow::write_NMEA_Data_SLOT(const QString &str)
     serial_1->write(K);
 }
 
-void MainWindow::write_BINR_Data_SLOT(const QString &str)
-{
-    BINR_NMEA = 1;
-
-    quint8 Size = (quint8)str.size()/2;
-    quint8 *Z   = new quint8[Size];
-
-    QString N = str;
-
-    for(int i = 0; i < Size; i++)
-    {
-        N.resize(2);
-        Z[i] = N.toUInt(0, 16);
-        N = str;
-        N.remove(0, i*2+2);
-    }
-
-    QByteArray K(Size, 0);
-
-    memcpy(K.data(), Z, sizeof(quint8)*Size);
-
-    serial_1->write(K);
-
-    delete [] Z;
-}
-
-void MainWindow::write_BINR_Data_SLOT(const QByteArray &BINR)
-{
-    BINR_NMEA = 1;
-    serial_1->write(BINR);
-}
-
-
 void MainWindow::readDatafromPort_1()
 {
     QByteArray data = serial_1->readAll();
@@ -250,15 +222,7 @@ void MainWindow::readDatafromPort_2()
 
 void MainWindow::ACCEL_TO_Dialog(const struct POHPR &)
 {
-   /* struct ACCEL A = Accel_F->Make_NMEA();
 
-    if(A.Status == 'A')
-    {
-        QByteArray data;
-        parse_nmea->Make_NMEA(data, A);
-        dialog->Show_NMEA_Text(data);
-    }
-    */
 }
 
 void MainWindow::Enable_Connect(bool Enable)

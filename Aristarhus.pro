@@ -17,7 +17,8 @@ SOURCES += \
     Formulars/NMEA_DIALOG/Show_Text.cpp \
     Formulars/NMEA_DIALOG/higlighter.cpp \
     Formulars/NMEA_DIALOG/dialog.cpp \
-    Formulars/Course_Roll_Pitch/Course_Roll_Pitch.cpp
+    Formulars/Course_Roll_Pitch/Course_Roll_Pitch.cpp \
+    Formulars/New_Dialog/New_Dialog.cpp
 
 HEADERS  += \
     parse_nmea.h \
@@ -28,7 +29,9 @@ HEADERS  += \
     Formulars/NMEA_DIALOG/higlighter.h \
     Formulars/NMEA_DIALOG/dialog.h \
     NMEA_Struct.h \
-    Formulars/Course_Roll_Pitch/Course_Roll_Pitch.h
+    Formulars/Course_Roll_Pitch/Course_Roll_Pitch.h \
+    Formulars/New_Dialog/New_Dialog.h
+  
 
 INCLUDEPATH += ./
 
@@ -38,8 +41,9 @@ RESOURCES += \
 FORMS += \
     Formulars/Main_Window/settingsdialog.ui \
     Formulars/Main_Window/mainwindow.ui \
-    Formulars/Course_Roll_Pitch/Course_Roll_Pitch.ui
-
+    Formulars/Course_Roll_Pitch/Course_Roll_Pitch.ui \
+    Formulars/New_Dialog/New_Dialog.ui
+ 
 LIBS = -lQt5SerialPort -lm
 
 QMAKE_CXXFLAGS += -Wextra -Wformat=2 -Winit-self -Wstrict-overflow=5 \

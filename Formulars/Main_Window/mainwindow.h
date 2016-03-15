@@ -9,14 +9,14 @@
 #include <QDockWidget>
 #include <QSettings>
 
-#include "parse_nmea.h"
-#include "Formulars/NMEA_DIALOG/dialog.h"
+#include <parse_nmea.h>
+#include <Formulars/NMEA_DIALOG/dialog.h>
+#include <Formulars/New_Dialog/New_Dialog.h>
 #include <Formulars/Course_Roll_Pitch/Course_Roll_Pitch.h>
 
 namespace Ui {
 class MainWindow;
 }
-
 
 class Console;
 class SettingsDialog;
@@ -42,8 +42,6 @@ private slots:
     void closeSerialPort_2();
     void about();
     void write_NMEA_Data_SLOT(const QString &);
-    void write_BINR_Data_SLOT(const QString &);
-    void write_BINR_Data_SLOT(const QByteArray &);
     void readDatafromPort_1();
     void readDatafromPort_2();
     void ACCEL_TO_Dialog(const struct POHPR &);
@@ -66,6 +64,7 @@ private:
     bool read_Accel;
     Ui::MainWindow *ui;
     Dialog              *dialog;
+    New_Dialog          *new_Dialog;
     Course_Roll_Pitch   *CRP;
     SettingsDialog      *settings_1, *settings_2;
     QSerialPort         *serial_1,   *serial_2;
